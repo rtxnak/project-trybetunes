@@ -9,6 +9,7 @@ import ProfileEdit from '../pages/ProfileEdit';
 import NotFound from '../pages/NotFound';
 import { createUser } from '../services/userAPI';
 import searchAlbumsAPIs from '../services/searchAlbumsAPI';
+// import getMusics from '../services/musicsAPI';
 
 class Content extends React.Component {
   constructor() {
@@ -18,6 +19,7 @@ class Content extends React.Component {
     this.onClickButton = this.onClickButton.bind(this);
     this.onClickSearchButton = this.onClickSearchButton.bind(this);
     this.searchAlbums = this.searchAlbums.bind(this);
+    // this.getMusicsFromAlbum = this.getMusicsFromAlbum.bind(this);
 
     this.state = {
       loginNameInput: '',
@@ -26,6 +28,7 @@ class Content extends React.Component {
       searchInput: '',
       onSearchInput: '',
       searchedAlbums: [],
+      // musics: [],
     };
   }
 
@@ -58,6 +61,13 @@ class Content extends React.Component {
     await this.searchAlbums();
   }
 
+  // async getMusicsFromAlbum(id) {
+  //   const getMusicsResult = await getMusics(id);
+  //   this.setState({
+  //     musics: [...getMusicsResult],
+  //   });
+  // }
+
   async searchAlbums() {
     const { searchInput } = this.state;
     const searchAlbumsResult = await searchAlbumsAPIs(searchInput);
@@ -77,6 +87,7 @@ class Content extends React.Component {
       searchInput,
       searchedAlbums,
       onSearchInput,
+      // musics,
     } = this.state;
 
     return (
@@ -109,7 +120,18 @@ class Content extends React.Component {
               />)
             }
           />
-          <Route path="/Album/:id" exact component={ Album } />
+          <Route
+            path="/Album/:id"
+            exact
+            component={ Album }
+            // render={
+            //   () => (<Album
+            //     onLoad={ onLoad }
+            //     musics={ musics }
+            //     getMusicsFromAlbum={ this.getMusicsFromAlbum }
+            //   />)
+            // }
+          />
           <Route path="/favorites" exact component={ Favorites } />
           <Route path="/profile" exact component={ Profile } />
           <Route path="/profile/edit" exact component={ ProfileEdit } />
