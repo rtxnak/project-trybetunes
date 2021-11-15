@@ -19,6 +19,7 @@ class Content extends React.Component {
       loginNameInput: '',
       onLoad: false,
       createUserIsOk: false,
+      searchInput: '',
     };
   }
 
@@ -44,6 +45,7 @@ class Content extends React.Component {
       loginNameInput,
       onLoad,
       createUserIsOk,
+      searchInput,
     } = this.state;
 
     return (
@@ -60,7 +62,14 @@ class Content extends React.Component {
               onClickButton={ this.onClickButton }
             />) }
           />
-          <Route path="/search" exact component={ Search } />
+          <Route
+            path="/search"
+            exact
+            render={ () => (<Search
+              searchInput={ searchInput }
+              onInputChange={ this.onInputChange }
+            />) }
+          />
           <Route path="/Album/:id" exact component={ Album } />
           <Route path="/favorites" exact component={ Favorites } />
           <Route path="/profile" exact component={ Profile } />
