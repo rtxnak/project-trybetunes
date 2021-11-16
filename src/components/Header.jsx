@@ -34,7 +34,7 @@ class Header extends Component {
       <header data-testid="header-component">
         {onLoad && <Loading />}
         <p data-testid="header-user-name">
-          {`LoginID: ${userLogin.name}`}
+          { userLogin.name }
         </p>
         <nav>
           <Link to="/search">
