@@ -7,6 +7,7 @@ import MusicCard from '../components/MusicCard';
 import {
   addSong,
   getFavoriteSongs,
+  removeSong,
 } from '../services/favoriteSongsAPI';
 
 class Album extends Component {
@@ -70,16 +71,10 @@ class Album extends Component {
 
     if (checked) {
       await addSong(trackInfo);
-      this.setState({
-        onLoad: false,
-      });
-      this.setState(({ favoriteList }) => ({
-        favoriteList: [...favoriteList, trackInfo],
-      }));
+      this.getFavoriteSongsOnload();
     } else {
-      this.setState({
-        onLoad: false,
-      });
+      await removeSong(trackInfo);
+      this.getFavoriteSongsOnload();
     }
   }
 
@@ -125,7 +120,7 @@ class Album extends Component {
         ))}
         Posição 0 do musics é vazio */
         }
-        {/* {console.log(favoriteList)} */}
+        {console.log(favoriteList)}
       </div>
 
     );
