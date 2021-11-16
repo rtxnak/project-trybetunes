@@ -4,7 +4,10 @@ import Header from '../components/Header';
 import getMusics from '../services/musicsAPI';
 import Loading from '../components/Loading';
 import MusicCard from '../components/MusicCard';
-import { addSong } from '../services/favoriteSongsAPI';
+import {
+  addSong,
+  getFavoriteSongs,
+} from '../services/favoriteSongsAPI';
 
 class Album extends Component {
   constructor() {
@@ -18,11 +21,13 @@ class Album extends Component {
 
     this.getMusicsFromAlbum = this.getMusicsFromAlbum.bind(this);
     this.checkedChanges = this.checkedChanges.bind(this);
+    this.getFavoriteSongsOnload = this.getFavoriteSongsOnload.bind(this);
   }
 
   componentDidMount() {
     const { match: { params: { id } } } = this.props;
     this.getMusicsFromAlbum(id);
+    this.getFavoriteSongsOnload();
   }
 
   async getMusicsFromAlbum(id) {
@@ -33,6 +38,14 @@ class Album extends Component {
     });
     this.setState({
       onLoad: false,
+    });
+  }
+
+  async getFavoriteSongsOnload() {
+    const favoriteSongs = await getFavoriteSongs();
+    this.setState({
+      onLoad: false,
+      favoriteList: [...favoriteSongs],
     });
   }
 
@@ -61,7 +74,7 @@ class Album extends Component {
         onLoad: false,
       });
       this.setState(({ favoriteList }) => ({
-        favoriteList: [...favoriteList, idNumber],
+        favoriteList: [...favoriteList, trackInfo],
       }));
     } else {
       this.setState({
@@ -99,7 +112,9 @@ class Album extends Component {
               previewUrl={ music.previewUrl }
               checkedChanges={ this.checkedChanges }
               trackId={ music.trackId }
-              checkedFavorite={ favoriteList.includes(music.trackId) }
+              checkedFavorite={ favoriteList.find(
+                (element) => element.trackId === music.trackId,
+              ) }
             />
           ))}
         {
