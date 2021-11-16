@@ -6,6 +6,9 @@ class MusicCard extends Component {
     const {
       trackName,
       previewUrl,
+      trackId,
+      checkedChanges,
+      checkedFavorite,
     } = this.props;
 
     return (
@@ -16,6 +19,17 @@ class MusicCard extends Component {
           O seu navegador não suporta o elemento
           <code>audio</code>
         </audio>
+        <label htmlFor={ trackId }>
+          Favorita
+          <input
+            type="checkbox"
+            data-testid={ `checkbox-music-${trackId}` }
+            id={ trackId }
+            onChange={ checkedChanges }
+            checked={ checkedFavorite }
+            name="favorite"
+          />
+        </label>
       </div>
     );
   }
@@ -24,6 +38,9 @@ class MusicCard extends Component {
 MusicCard.propTypes = {
   trackName: PropTypes.string.isRequired,
   previewUrl: PropTypes.string.isRequired,
+  trackId: PropTypes.number.isRequired,
+  checkedChanges: PropTypes.func.isRequired,
+  checkedFavorite: PropTypes.bool.isRequired,
 };
 
 export default MusicCard;

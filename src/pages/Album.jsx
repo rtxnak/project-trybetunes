@@ -4,6 +4,7 @@ import Header from '../components/Header';
 import getMusics from '../services/musicsAPI';
 import Loading from '../components/Loading';
 import MusicCard from '../components/MusicCard';
+import { addSong } from '../services/favoriteSongsAPI';
 
 class Album extends Component {
   constructor() {
@@ -12,9 +13,11 @@ class Album extends Component {
     this.state = {
       musics: [],
       onLoad: true,
+      favoriteList: [],
     };
 
     this.getMusicsFromAlbum = this.getMusicsFromAlbum.bind(this);
+    this.checkedChanges = this.checkedChanges.bind(this);
   }
 
   componentDidMount() {
@@ -33,10 +36,45 @@ class Album extends Component {
     });
   }
 
+  async checkedChanges(
+    {
+      target:
+        { id,
+          checked,
+        },
+    },
+  ) {
+    const {
+      musics,
+    } = this.state;
+    const idNumber = parseInt(id, 10);
+    // console.log(id);
+    const trackInfo = musics.find((music) => music.trackId === idNumber);
+    // console.log(trackInfo);
+    this.setState({
+      onLoad: true,
+    });
+
+    if (checked) {
+      await addSong(trackInfo);
+      this.setState({
+        onLoad: false,
+      });
+      this.setState(({ favoriteList }) => ({
+        favoriteList: [...favoriteList, idNumber],
+      }));
+    } else {
+      this.setState({
+        onLoad: false,
+      });
+    }
+  }
+
   render() {
     const {
       musics,
       onLoad,
+      favoriteList,
     } = this.state;
 
     const artistName = !onLoad
@@ -59,6 +97,9 @@ class Album extends Component {
               key={ music.trackId }
               trackName={ music.trackName }
               previewUrl={ music.previewUrl }
+              checkedChanges={ this.checkedChanges }
+              trackId={ music.trackId }
+              checkedFavorite={ favoriteList.includes(music.trackId) }
             />
           ))}
         {
@@ -69,6 +110,7 @@ class Album extends Component {
         ))}
         Posição 0 do musics é vazio */
         }
+        {/* {console.log(favoriteList)} */}
       </div>
 
     );
